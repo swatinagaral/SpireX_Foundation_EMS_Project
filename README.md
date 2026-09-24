@@ -1,0 +1,1 @@
+echo "# SpireX Foundation EMS Project"
