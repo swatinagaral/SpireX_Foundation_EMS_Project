@@ -9,6 +9,7 @@ import { can } from "@/lib/permissions";
 
 const NAV = [
   { href: "/dashboard", label: "Dashboard", perm: null, icon: "🏠" },
+  { href: "/users", label: "Users", perm: "users.manage", icon: "👤" },
   { href: "/announcements", label: "Announcements", perm: "announcements.read", icon: "📢" },
   { href: "/emails/compose", label: "Compose Email", perm: "emails.send", icon: "✉️" },
   { href: "/emails/history", label: "Email History", perm: "emails.history", icon: "🕘" },
@@ -60,6 +61,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       >
         <div className="hidden px-5 py-5 text-xl font-bold text-indigo-700 md:block">EMS</div>
         <nav className="space-y-1 px-3 pb-4">
+        
           {items.map((n) => {
             const active = path === n.href || path.startsWith(n.href + "/");
             return (

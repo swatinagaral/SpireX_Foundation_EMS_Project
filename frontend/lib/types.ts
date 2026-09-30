@@ -8,6 +8,7 @@ export interface User {
   status: string;
   batches?: string[];
   programs?: string[];
+  createdAt?: string;
 }
 
 export interface Audience {
@@ -72,3 +73,6 @@ export interface Paged {
   page: number;
   pages: number;
 }
+
+
+
