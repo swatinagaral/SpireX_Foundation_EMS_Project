@@ -8,6 +8,7 @@ export interface User {
   status: string;
   batches?: string[];
   programs?: string[];
+  departments?: string[];
   createdAt?: string;
 }
 
@@ -16,9 +17,10 @@ export interface Audience {
   roles: string[];
   batches: string[];
   programs: string[];
+  departments: string[];
 }
 
-export type Priority = "normal" | "important" | "urgent";
+export type Priority = "low" | "medium" | "high" | "urgent";
 export type AnnouncementStatus = "draft" | "published" | "archived";
 
 export interface Announcement {
@@ -73,6 +75,3 @@ export interface Paged {
   page: number;
   pages: number;
 }
-
-
-

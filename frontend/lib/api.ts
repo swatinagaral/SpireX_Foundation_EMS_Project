@@ -57,3 +57,32 @@ export async function api<T = Record<string, unknown>>(path: string, opts: Optio
   }
   return data as T;
 }
+
+// Downloads a file (CSV/XLSX/PDF) from a protected endpoint using the saved auth token.
+export async function apiDownload(path: string, query: Record<string, string | number | undefined> = {}, suggestedName = "download") {
+  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const url = new URL(`${API}/api${path}`);
+  Object.entries(query).forEach(([k, v]) => { if (v !== undefined && v !== "") url.searchParams.set(k, String(v)); });
+
+  const token = getToken();
+  const res = await fetch(url.toString(), { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  if (!res.ok) {
+    let message = "Export failed";
+    try { message = (await res.json()).message || message; } catch { /* not JSON */ }
+    throw new ApiError(message, res.status);
+  }
+
+  const disposition = res.headers.get("Content-Disposition") || "";
+  const match = disposition.match(/filename="([^"]+)"/);
+  const filename = match ? match[1] : suggestedName;
+
+  const blob = await res.blob();
+  const objectUrl = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = objectUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(objectUrl);
+}
