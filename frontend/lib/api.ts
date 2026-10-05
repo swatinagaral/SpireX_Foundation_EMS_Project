@@ -86,3 +86,24 @@ export async function apiDownload(path: string, query: Record<string, string | n
   a.remove();
   URL.revokeObjectURL(objectUrl);
 }
+
+// Opens a "Print" export (an HTML page) in a new tab and triggers the browser print dialog.
+export async function apiPrint(path: string, query: Record<string, string | number | undefined> = {}) {
+  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const url = new URL(`${API}/api${path}`);
+  Object.entries(query).forEach(([k, v]) => { if (v !== undefined && v !== "") url.searchParams.set(k, String(v)); });
+
+  const token = getToken();
+  const res = await fetch(url.toString(), { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  if (!res.ok) {
+    let message = "Print export failed";
+    try { message = (await res.json()).message || message; } catch { /* not JSON */ }
+    throw new ApiError(message, res.status);
+  }
+  const html = await res.text();
+  const win = window.open("", "_blank");
+  if (!win) throw new Error("Pop-up blocked. Please allow pop-ups for this site.");
+  win.document.write(html);
+  win.document.close();
+  win.onload = () => win.print();
+}

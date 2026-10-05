@@ -75,3 +75,11 @@ export interface Paged {
   page: number;
   pages: number;
 }
+
+export interface Program { _id: string; name: string; status: "active" | "upcoming" | "completed"; }
+export interface Batch { _id: string; name: string; program: Program | string; startDate: string; endDate: string; status: "upcoming" | "ongoing" | "completed"; }
+export interface Student { _id: string; name: string; email: string; program: Program | string; batch: Batch | string; status: "active" | "completed" | "dropped"; }
+export interface Task { _id: string; title: string; program?: Program | string; batch?: Batch | string; domain?: string; status: "pending" | "in_progress" | "completed"; dueDate?: string; }
+export interface Attendance { _id: string; student: Student | string; batch: Batch | string; date: string; status: "present" | "absent" | "late"; }
+export interface Performance { _id: string; student: Student | string; program?: Program | string; batch?: Batch | string; domain?: string; task?: Task | string; score: number; remarks?: string; }
+export interface Certificate { _id: string; student: Student | string; certificateId: string; year: number; issuedAt: string; expiresAt?: string; status: "issued" | "revoked" | "reworked"; verified: boolean; }

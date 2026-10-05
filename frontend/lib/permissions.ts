@@ -4,6 +4,8 @@ import type { Role } from "./types";
 const permissions: Record<Role, string[]> = {
   super_admin: ["*"],
   admin: [
+    "users.manage",
+    "data.manage",
     "announcements.create", "announcements.read", "announcements.update", "announcements.delete",
     "emails.send", "emails.bulk", "emails.template", "emails.history",
     "reports.view", "reports.export",
